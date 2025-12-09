@@ -23,17 +23,22 @@ class TicketService
                 ['phone' => $data['phone']],
                 [
                     'name' => $data['name'],
-                    'email' => $data['email'] ?? null,
+                    'email' => $data['email'] ?? null
                 ]
             );
 
-            $ticketData = [
+            $ticket = $this->ticketRepository->create([
                 'customer_id' => $customer->id,
                 'subject'     => $data['subject'],
                 'content'     => $data['message'],
-            ];
+            ]);
 
-            return $this->ticketRepository->create($ticketData);
+            if (isset($data['file'])) {
+                $ticket->addMedia($data['file'])
+                    ->toMediaCollection('tickets');
+            }
+
+            return $ticket;
         });
     }
 }
