@@ -6,6 +6,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 p-10">
+<div class="bg-white shadow mb-6">
+    <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
+        <div class="font-bold text-gray-700">Ticket CRM</div>
+        <div class="flex items-center gap-4">
+            <span class="text-sm text-gray-500">{{ Auth::user()->name }}</span>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="text-sm text-red-600 hover:underline">Выйти</button>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="max-w-6xl mx-auto bg-white shadow-md rounded-lg p-6">
     <h1 class="text-2xl font-bold mb-6">Заявки клиентов</h1>
 
