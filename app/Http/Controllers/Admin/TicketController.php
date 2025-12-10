@@ -6,11 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use App\Enums\TicketStatus;
 use Illuminate\Http\Request;
+use App\Contracts\TicketRepositoryInterface;
 
 class TicketController extends Controller
 {
-    public function index(Request $request)
-    {
+    public function index(Request $request, TicketRepositoryInterface $repository)    {
+
+        $statistics = $repository->getStatistics();
+
         $tickets = Ticket::with('customer')
         ->latest()
         ->filter($request->only(['status', 'date', 'search']))
@@ -19,7 +22,8 @@ class TicketController extends Controller
 
         return view('admin.tickets.index', [
             'tickets' => $tickets,
-            'statuses' => TicketStatus::cases()
+            'statuses' => TicketStatus::cases(),
+            'statistics' => $statistics
         ]);
     }
 

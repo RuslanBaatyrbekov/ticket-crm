@@ -9,6 +9,23 @@
 <div class="max-w-6xl mx-auto bg-white shadow-md rounded-lg p-6">
     <h1 class="text-2xl font-bold mb-6">Заявки клиентов</h1>
 
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg shadow-sm">
+            <div class="text-blue-500 text-sm font-medium uppercase">За сегодня</div>
+            <div class="text-2xl font-bold text-gray-800">{{ $statistics['total_today'] }}</div>
+        </div>
+
+        <div class="bg-indigo-50 border border-indigo-200 p-4 rounded-lg shadow-sm">
+            <div class="text-indigo-500 text-sm font-medium uppercase">За неделю</div>
+            <div class="text-2xl font-bold text-gray-800">{{ $statistics['total_week'] }}</div>
+        </div>
+
+        <div class="bg-purple-50 border border-purple-200 p-4 rounded-lg shadow-sm">
+            <div class="text-purple-500 text-sm font-medium uppercase">За месяц</div>
+            <div class="text-2xl font-bold text-gray-800">{{ $statistics['total_month'] }}</div>
+        </div>
+    </div>
+
     <form method="GET" class="flex gap-4 mb-6 bg-gray-50 p-4 rounded border">
         <input type="date" name="date" value="{{ request('date') }}" class="border p-2 rounded">
 
