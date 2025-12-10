@@ -1,0 +1,161 @@
+openapi: 3.0.0
+info:
+  title: Ticket CRM API
+  description: API для сбора заявок с сайта и виджета, а также просмотра статистики.
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:8000/api
+    description: Local Development Server
+
+paths:
+  /tickets:
+    post:
+      summary: Создание новой заявки
+      description: |
+        Принимает данные формы, валидирует телефон (E.164) и сохраняет файлы.
+        Имеет ограничение: 1 заявка в сутки с одного номера.
+      tags:
+        - Tickets
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - name
+                - phone
+                - subject
+                - message
+              properties:
+                name:
+                  type: string
+                  description: Имя клиента
+                  example: Иван Иванов
+                phone:
+                  type: string
+                  description: Телефон в формате E.164
+                  example: "+79991234567"
+                email:
+                  type: string
+                  format: email
+                  description: Email (опционально)
+                  example: ivan@example.com
+                subject:
+                  type: string
+                  description: Тема обращения
+                  example: Не работает доставка
+                message:
+                  type: string
+                  description: Текст сообщения
+                  example: Прошу перезвонить, курьер опаздывает.
+                file:
+                  type: string
+                  format: binary
+                  description: Файл (изображение или документ, макс 10Мб)
+      responses:
+        '201':
+          description: Заявка успешно создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketResource'
+        '422':
+          description: Ошибка валидации данных
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '429':
+          description: Превышен лимит запросов (Rate Limit)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Too Many Attempts.
+
+  /tickets/statistics:
+    get:
+      summary: Получение статистики
+      description: Возвращает количество заявок за текущие сутки, неделю и месяц.
+      tags:
+        - Statistics
+      responses:
+        '200':
+          description: Статистика успешно получена
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      total_today:
+                        type: integer
+                        example: 5
+                      total_week:
+                        type: integer
+                        example: 24
+                      total_month:
+                        type: integer
+                        example: 105
+
+components:
+  schemas:
+    TicketResource:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            subject:
+              type: string
+              example: Не работает доставка
+            status:
+              type: string
+              description: Человекочитаемый статус
+              example: Новая
+            created_at:
+              type: string
+              format: date-time
+              example: "2025-12-10 14:30:00"
+            customer:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Иван Иванов
+                phone:
+                  type: string
+                  example: "+79991234567"
+            files:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: screenshot.jpg
+                  url:
+                    type: string
+                    example: http://127.0.0.1:8000/storage/1/screenshot.jpg
+
+    ValidationError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: The phone field is required.
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
