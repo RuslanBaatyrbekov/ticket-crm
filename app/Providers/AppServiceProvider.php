@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
+use App\Contracts\TicketRepositoryInterface;
+use App\Repositories\TicketRepository;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
-use App\Contracts\TicketRepositoryInterface;
-use App\Repositories\TicketRepository;
 
 class AppServiceProvider extends ServiceProvider
 {

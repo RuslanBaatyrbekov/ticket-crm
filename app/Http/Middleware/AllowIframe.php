@@ -12,7 +12,7 @@ class AllowIframe
     {
         $response = $next($request);
         $response->headers->remove('X-Frame-Options');
-        $response->headers->set('Content-Security-Policy', "frame-ancestors *");
+        $response->headers->set('Content-Security-Policy', 'frame-ancestors *');
 
         return $response;
     }

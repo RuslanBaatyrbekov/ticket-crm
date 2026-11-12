@@ -8,5 +8,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+Route::get('/tickets/statistics', [TicketController::class, 'statistics']);
+
 Route::post('/tickets', [TicketController::class, 'store'])
     ->middleware('throttle:ticket_creation');

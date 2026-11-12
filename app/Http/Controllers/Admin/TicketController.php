@@ -2,28 +2,30 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Contracts\TicketRepositoryInterface;
+use App\Enums\TicketStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
-use App\Enums\TicketStatus;
 use Illuminate\Http\Request;
-use App\Contracts\TicketRepositoryInterface;
+use Illuminate\Validation\Rule;
 
 class TicketController extends Controller
 {
-    public function index(Request $request, TicketRepositoryInterface $repository)    {
+    public function index(Request $request, TicketRepositoryInterface $repository)
+    {
 
         $statistics = $repository->getStatistics();
 
         $tickets = Ticket::with('customer')
-        ->latest()
-        ->filter($request->only(['status', 'date', 'search']))
+            ->latest()
+            ->filter($request->only(['status', 'date', 'search']))
             ->paginate(20)
             ->withQueryString();
 
         return view('admin.tickets.index', [
             'tickets' => $tickets,
             'statuses' => TicketStatus::cases(),
-            'statistics' => $statistics
+            'statistics' => $statistics,
         ]);
     }
 
@@ -31,14 +33,14 @@ class TicketController extends Controller
     {
         return view('admin.tickets.show', [
             'ticket' => $ticket->load(['customer', 'media']),
-            'statuses' => TicketStatus::cases()
+            'statuses' => TicketStatus::cases(),
         ]);
     }
 
     public function update(Request $request, Ticket $ticket)
     {
 
-        $request->validate(['status' => 'required|string']);
+        $request->validate(['status' => ['required', Rule::enum(TicketStatus::class)]]);
 
         $ticket->update([
             'status' => $request->status,

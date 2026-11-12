@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         $admin = User::factory()->create([
             'name' => 'Admin',
             'email' => 'admin@test.com',
-            'password' => bcrypt('password'), // Пароль для входа
+            'password' => bcrypt('password'),
         ]);
         $admin->assignRole($roleAdmin);
 
@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
 
         Customer::factory(10)->create()->each(function ($customer) {
             Ticket::factory(rand(1, 3))->create([
-                'customer_id' => $customer->id
+                'customer_id' => $customer->id,
             ]);
         });
     }

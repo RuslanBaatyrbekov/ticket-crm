@@ -14,7 +14,7 @@ class TicketService
     ) {}
 
     /**
-     * Создает заявку, попутно находя или создавая клиента.
+     * Creates a ticket, finding or creating the customer by phone number.
      */
     public function createTicket(array $data): Ticket
     {
@@ -23,14 +23,14 @@ class TicketService
                 ['phone' => $data['phone']],
                 [
                     'name' => $data['name'],
-                    'email' => $data['email'] ?? null
+                    'email' => $data['email'] ?? null,
                 ]
             );
 
             $ticket = $this->ticketRepository->create([
                 'customer_id' => $customer->id,
-                'subject'     => $data['subject'],
-                'content'     => $data['message'],
+                'subject' => $data['subject'],
+                'content' => $data['message'],
             ]);
 
             if (isset($data['file'])) {
@@ -38,7 +38,15 @@ class TicketService
                     ->toMediaCollection('tickets');
             }
 
-            return $ticket;
+            return $ticket->refresh();
         });
+    }
+
+    /**
+     * Ticket counts for today, the current week and the current month.
+     */
+    public function getStatistics(): array
+    {
+        return $this->ticketRepository->getStatistics();
     }
 }

@@ -22,12 +22,12 @@ class StoreTicketRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'    => ['required', 'string', 'max:255'],
-            'phone'   => ['required', 'phone:mobile'],
-            'email'   => ['nullable', 'email', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'phone:mobile'],
+            'email' => ['nullable', 'email', 'max:255'],
             'subject' => ['required', 'string', 'max:255'],
             'message' => ['required', 'string', 'min:10'],
-            'file'    => ['nullable', 'file', 'max:10240'],
+            'file' => ['nullable', 'file', 'max:10240'],
         ];
     }
 }

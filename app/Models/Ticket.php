@@ -20,7 +20,7 @@ class Ticket extends Model implements HasMedia
         'subject',
         'content',
         'status',
-        'manager_reply_at'
+        'manager_reply_at',
     ];
 
     protected $casts = [

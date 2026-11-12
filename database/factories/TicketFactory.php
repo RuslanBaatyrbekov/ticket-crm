@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Customer;
 use App\Enums\TicketStatus;
+use App\Models\Customer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

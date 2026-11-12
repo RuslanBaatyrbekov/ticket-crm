@@ -26,7 +26,7 @@ class TicketController extends Controller
         $stats = $this->ticketService->getStatistics();
 
         return response()->json([
-            'data' => $stats
+            'data' => $stats,
         ]);
     }
 }

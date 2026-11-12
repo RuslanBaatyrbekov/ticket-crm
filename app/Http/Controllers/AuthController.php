@@ -7,13 +7,13 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    // 1. Показать форму входа
+    // Show the login form
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
-    // 2. Обработать данные формы
+    // Authenticate the user
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -23,6 +23,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+
             return redirect()->intended('admin/tickets');
         }
 
@@ -31,7 +32,7 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    // 3. Выход
+    // Log out
     public function logout(Request $request)
     {
         Auth::logout();
